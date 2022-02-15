@@ -6,3 +6,5 @@ const MyButton = ({children, changeText}) => {
 }
 
 export default MyButton
+
+автваавтавт
