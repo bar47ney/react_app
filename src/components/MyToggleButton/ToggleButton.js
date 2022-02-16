@@ -1,15 +1,15 @@
-import React from 'react' 
-import btnStyle from './ToggleButton.css'
+import React from "react";
+import btnStyle from "./ToggleButton.css";
 
-const ToggleButton = ({children, toggle, setToggle}) => {
-  
-    return (
-    <button 
-        className={toggle ? 'button-red' : 'button-green'} 
-        onClick={() => setToggle(!toggle)}
+const ToggleButton = ({ children, toggle, setToggle }) => {
+  return (
+    <button
+      className={toggle ? "button-red" : "button-green"}
+      onClick={() => setToggle(!toggle)}
     >
-        {children}
-    </button>)
-}
+      {children}
+    </button>
+  );
+};
 
-export default ToggleButton
+export default ToggleButton;

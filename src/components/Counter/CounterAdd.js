@@ -1,8 +1,7 @@
-import React from 'react' 
+import React from "react";
 
-const CounterAdd = ({count, addCount}) => {
-  
-    return <button onClick={() => addCount(count + 1)}>+</button>
-}
+const CounterAdd = ({ count, addCount }) => {
+  return <button onClick={() => addCount(count + 1)}>+</button>;
+};
 
-export default CounterAdd
+export default CounterAdd;
