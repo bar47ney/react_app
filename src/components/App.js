@@ -34,15 +34,14 @@
 
 // export default App;
 
-import UserList from "./UserList";
-import { users } from "../users";
-import UserAdd from "../UserAdd";
+import Users from "./pages/Users";
 
 const App = () => {
   return (
     <div className="App">
-      <UserList users={users} />
-      <UserAdd />
+      {/* <UserList users={users} />
+      <UserAdd /> */}
+      <Users />
     </div>
   );
 };

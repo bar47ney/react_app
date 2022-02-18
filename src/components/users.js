@@ -1,4 +1,4 @@
-export const users = [
+export const usersDb = [
   {
     name: "Andrew",
     age: 36,

@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 
-const UserAdd = () => {
+const UserAdd = ({ addUser }) => {
   const [user, setUser] = useState({});
   const onChange = (e) => {
     const field = e.target.id;
     setUser({ ...user, [field]: e.target.value });
   };
-  console.log(user);
+  const getUser = () => {
+    const newUser = {
+      name: "",
+      age: "",
+      country: "",
+    };
+    Object.keys(values).map((value) => {
+      newUser[value] = document.querySelector(`#${value}`).value;
+    });
+    return newUser;
+  };
   const values = {
     name: "text",
     age: "number",
@@ -20,10 +30,10 @@ const UserAdd = () => {
           key={index}
           type={values[value]}
           placeholder={`Input user ${value}`}
-          onChange={onChange}
+          // onChange={onChange}
         />
       ))}
-      <button>Add new User</button>
+      <button onClick={() => addUser(getUser())}>Add new User</button>
     </>
   );
 };

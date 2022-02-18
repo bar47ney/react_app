@@ -1,6 +1,7 @@
 import React from "react";
 
 const UserList = ({ users }) => {
+  console.log(users);
   return users.map((user, index) => (
     <div key={index} style={{ margin: "15px" }}>
       <div>Name: {user.name}</div>
