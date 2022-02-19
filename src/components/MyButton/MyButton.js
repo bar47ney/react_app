@@ -1,5 +1,5 @@
 import React from "react";
-import btnStyle from "./MyButton.css";
+import "./MyButton.css";
 
 const MyButton = ({ children, action }) => {
   return (

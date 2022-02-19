@@ -1,5 +1,5 @@
 import React from "react";
-import btnStyle from "./ToggleButton.css";
+import "./ToggleButton.css";
 
 const ToggleButton = ({ children, toggle, setToggle }) => {
   return (
