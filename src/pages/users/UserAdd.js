@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const UserAdd = ({ users, setUsers }) => {
+const UserAdd = ({ users, setUsers, closeModal }) => {
   const onChange = (e) => {
     const field = e.target.id;
     setValues({ ...values, [field]: e.target.value });
@@ -12,6 +12,7 @@ const UserAdd = ({ users, setUsers }) => {
       age: "",
       country: "",
     });
+    closeModal();
   };
   const [values, setValues] = useState({
     name: "",
@@ -23,27 +24,35 @@ const UserAdd = ({ users, setUsers }) => {
       {Object.keys(values).map((value, index) => {
         if (value === "age") {
           return (
-            <input
-              id={value}
-              key={index}
-              value={values[value]}
-              type="number"
-              placeholder={`Input user ${value}`}
-              onChange={onChange}
-            />
+            <div className="" key={index}>
+              <input
+                id={value}
+                value={values[value]}
+                type="number"
+                placeholder={`Input user ${value}`}
+                onChange={onChange}
+                className="mb-1 form-control"
+              />
+            </div>
           );
         }
         return (
-          <input
-            id={value}
-            key={index}
-            value={values[value]}
-            placeholder={`Input user ${value}`}
-            onChange={onChange}
-          />
+          <div className="" key={index}>
+            <input
+              id={value}
+              value={values[value]}
+              placeholder={`Input user ${value}`}
+              onChange={onChange}
+              className="mb-1 form-control"
+            />
+          </div>
         );
       })}
-      <button className="m-4 btn btn-primary" onClick={addUser}>Add new User</button>
+      <div className="">
+        <button className="btn btn-primary mt-2 btn-sm" onClick={addUser}>
+          Add new User
+        </button>
+      </div>
     </>
   );
 };

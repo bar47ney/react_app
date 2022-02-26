@@ -1,8 +1,8 @@
 export const usersDb = [
   {
-    name: "Andrew",
-    age: 36,
-    country: "USA",
+    name: "Sergo",
+    age: 22,
+    country: "Belarus",
   },
   {
     name: "Max",
@@ -10,8 +10,8 @@ export const usersDb = [
     country: "Poland",
   },
   {
-    name: "Sergo",
-    age: 22,
-    country: "Belarus",
+    name: "Andrew",
+    age: 36,
+    country: "USA",
   },
 ];
