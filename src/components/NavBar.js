@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
+  const [viewMobileMenu, setViewMobileMenu] = useState(false);
+  const links = [
+    {
+      name: "Home",
+      link: "/",
+    },
+    {
+      name: "Users",
+      link: "/users",
+    },
+    {
+      name: "Posts",
+      link: "/posts",
+    },
+    {
+      name: "Photos",
+      link: "/photos",
+    },
+    {
+      name: "Counter",
+      link: "/counter",
+    },
+  ];
+
+  const viewMenu = () => {
+    setViewMobileMenu(!viewMobileMenu);
+  };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -17,34 +45,24 @@ const NavBar = () => {
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            onClick={viewMenu}
           >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className="collapse navbar-collapse justify-content-end"
+            className={`collapse navbar-collapse justify-content-end ${
+              viewMobileMenu ? "show" : ""
+            }`}
             id="navbarNav"
           >
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link to="/users" className="nav-link">
-                  Users
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/counter" className="nav-link">
-                  Counter
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/" className="nav-link">
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/posts" className="nav-link">
-                  Posts
-                </Link>
-              </li>
+              {links.map((link, index) => (
+                <li className="nav-item" key={index}>
+                  <Link to={link.link} className="nav-link" onClick={viewMenu}>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

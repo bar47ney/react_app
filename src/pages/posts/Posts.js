@@ -1,18 +1,48 @@
-import React, { useMemo, useState } from "react";
-import { postsDb } from "../../components/posts";
+import React, { useEffect, useMemo, useState } from "react";
 import MyModal from "../../components/MyModal/MyModal";
+import Crud from "../../service/crud.service";
+import PostAdd from "./PostAdd";
+import PostEdit from "./PostEdit";
+import Spinner from "../../components/Spinner";
 
 const Posts = () => {
+  const postsCrud = new Crud("posts");
   const [sorter, setSorter] = useState(0);
   const [searchQuery, setSearcQuery] = useState("");
-  const [usersPosts, setUsersPosts] = useState(postsDb);
+  const [usersPosts, setUsersPosts] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [deletePostId, setDeletePostId] = useState(null);
 
-  const deletePostReal = () => {
-    setUsersPosts(usersPosts.filter((post) => post.id !== deletePostId));
-    setShowModal(false);
+  const [showModalAdd, setShowModalAdd] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [editPost, setEditPost] = useState({});
+
+  const [viewSpinner, setViewSpinner] = useState(false);
+
+  useEffect(() => {
+    fetchAllPosts();
+  }, []);
+
+  console.log(usersPosts);
+
+  const fetchAllPosts = () => {
+    setViewSpinner(true);
+    postsCrud.get(1, 12).then((res) => {
+      console.log(res.data);
+      setUsersPosts(res.data);
+      setViewSpinner(false);
+    });
+  };
+
+  const deletePostReal = (id) => {
+    postsCrud
+      .delete(id)
+      .then((res) => {
+        setUsersPosts(usersPosts.filter((post) => post.id !== id));
+        setShowModal(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   const deletePost = (post) => {
@@ -26,6 +56,16 @@ const Posts = () => {
 
   const onSort = (e) => {
     setSorter(+e.target.value);
+  };
+
+  const viewAddModal = () => {
+    setShowModalAdd(true);
+  };
+
+  const viewEditModal = (post) => {
+    setShowModalEdit(true);
+    setEditPost(post);
+    console.log(editPost);
   };
 
   const sortedPosts = useMemo(() => {
@@ -48,9 +88,35 @@ const Posts = () => {
         onCancel={() => setShowModal(false)}
         closeButtonShow
         saveButtonShow
-        onConfirm={() => deletePostReal()}
+        onConfirm={() => deletePostReal(deletePostId)}
       >
         <h4>Do you really want to delete or think about?</h4>
+      </MyModal>
+      <MyModal
+        visible={showModalAdd}
+        onCancel={() => setShowModalAdd(false)}
+        closeButtonShow
+      >
+        <PostAdd
+          posts={usersPosts}
+          setPosts={setUsersPosts}
+          closeModal={() => setShowModalAdd(false)}
+          postsCrud={postsCrud}
+        />
+      </MyModal>
+      <MyModal
+        visible={showModalEdit}
+        onCancel={() => setShowModalEdit(false)}
+        closeButtonShow
+      >
+        <PostEdit
+          posts={usersPosts}
+          setPosts={setUsersPosts}
+          closeModal={() => setShowModalEdit(false)}
+          postsCrud={postsCrud}
+          editPost={editPost}
+          setEditPost={setEditPost}
+        />
       </MyModal>
       <div className="container mb-5">
         <div className="input-group mt-3">
@@ -76,30 +142,48 @@ const Posts = () => {
           </option>
           <option value="1">from Max to Min</option>
         </select>
-        <div className="row">
-          {sortedAndSearchedPosts.length ? (
-            sortedAndSearchedPosts.map((post, id) => (
-              <div className="col-sm-6 mt-3" key={post.id}>
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      {post.id}. {post.title}
-                    </h5>
-                    <p className="card-text">{post.body}</p>
-                    <button
-                      onClick={() => deletePost(post)}
-                      className="btn btn-primary"
-                    >
-                      Delete
-                    </button>
+        {viewSpinner ? (
+          <Spinner />
+        ) : (
+          <>
+            <button
+              className="btn btn-secondary mt-3"
+              onClick={() => viewAddModal()}
+            >
+              Add post
+            </button>
+            <div className="row">
+              {sortedAndSearchedPosts.length ? (
+                sortedAndSearchedPosts.map((post, id) => (
+                  <div className="col-sm-6 mt-3" key={post.id}>
+                    <div className="card">
+                      <div className="card-body">
+                        <h5 className="card-title">
+                          {post.id}. {post.title}
+                        </h5>
+                        <p className="card-text">{post.body}</p>
+                        <button
+                          onClick={() => deletePost(post)}
+                          className="btn btn-danger"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={() => viewEditModal(post)}
+                          className="btn btn-primary m-1"
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <h3 className="mt-3">Not found posts</h3>
-          )}
-        </div>
+                ))
+              ) : (
+                <h3 className="mt-3">Not found posts</h3>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

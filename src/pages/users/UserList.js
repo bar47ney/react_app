@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import MyModal from "../../components/MyModal/MyModal";
+import { Link } from "react-router-dom";
 
 const UserList = ({ users, setUsers }) => {
   const [sorter, setSorter] = useState(0);
@@ -78,6 +79,7 @@ const UserList = ({ users, setUsers }) => {
       <table className="table">
         <thead>
           <tr>
+            <th>id</th>
             <th>Name</th>
             <th>Age</th>
             <th>Country</th>
@@ -87,6 +89,9 @@ const UserList = ({ users, setUsers }) => {
           {sortedAndSearchedUsers.length ? (
             sortedAndSearchedUsers.map((user, index) => (
               <tr key={index}>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.id}</Link>
+                </td>
                 <td>{user.name}</td>
                 <td>{user.age}</td>
                 <td>{user.country}</td>
