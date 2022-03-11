@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../context/context";
 
 const NavBar = () => {
   const [viewMobileMenu, setViewMobileMenu] = useState(false);
+  const { auth, setAuth } = useContext(AuthContext);
   const links = [
     {
       name: "Home",
@@ -65,6 +67,16 @@ const NavBar = () => {
               ))}
             </ul>
           </div>
+          {auth ? (
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => setAuth(false)}
+            >
+              LogOut
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </nav>
     </div>

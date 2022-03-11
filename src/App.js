@@ -38,15 +38,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBar";
+import AuthContext from "./context/context";
+import { useState } from "react";
 
 const App = () => {
+  const [auth, setAuth] = useState(false);
   return (
-    <div className="App">
-      <BrowserRouter>
-        <NavBar />
-        <AppRouter />
-      </BrowserRouter>
-    </div>
+    <AuthContext.Provider
+      value={{
+        auth,
+        setAuth
+      }}
+    >
+      <div className="App">
+        <BrowserRouter>
+          <NavBar />
+          <AppRouter />
+        </BrowserRouter>
+      </div>
+    </AuthContext.Provider>
   );
 };
 

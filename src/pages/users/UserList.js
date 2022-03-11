@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useContext } from "react";
 import MyModal from "../../components/MyModal/MyModal";
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/context";
 
 const UserList = ({ users, setUsers }) => {
   const [sorter, setSorter] = useState(0);
@@ -41,6 +42,9 @@ const UserList = ({ users, setUsers }) => {
       user.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery, sortedUsers]);
+
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log(auth);
 
   return (
     <>

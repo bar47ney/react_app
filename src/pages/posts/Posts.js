@@ -4,6 +4,10 @@ import Crud from "../../service/crud.service";
 import PostAdd from "./PostAdd";
 import PostEdit from "./PostEdit";
 import Spinner from "../../components/Spinner";
+import {
+  useSortedPosts,
+  useSortedAndSearchedPosts,
+} from "../../hooks/usePosts";
 
 const Posts = () => {
   const postsCrud = new Crud("posts");
@@ -68,18 +72,11 @@ const Posts = () => {
     console.log(editPost);
   };
 
-  const sortedPosts = useMemo(() => {
-    if (sorter) {
-      return [...usersPosts].sort((a, b) => b.id - a.id);
-    }
-    return usersPosts;
-  }, [sorter, usersPosts]);
-
-  const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter((post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery, sortedPosts]);
+  const sortedAndSearchedPosts = useSortedAndSearchedPosts(
+    usersPosts,
+    sorter,
+    searchQuery
+  );
 
   return (
     <>
