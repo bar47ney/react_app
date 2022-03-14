@@ -42,12 +42,12 @@ import AuthContext from "./context/context";
 import { useState } from "react";
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState({ session: false, user: "" });
   return (
     <AuthContext.Provider
       value={{
         auth,
-        setAuth
+        setAuth,
       }}
     >
       <div className="App">

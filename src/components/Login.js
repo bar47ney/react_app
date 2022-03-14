@@ -15,8 +15,8 @@ const Login = () => {
       password: "test",
     };
     userTest.login === values.login && userTest.password === values.password
-      ? setAuth(true)
-      : setAuth(false);
+      ? setAuth({session: true, user: userTest.login})
+      : setAuth({session: false, user: ""});
     setValues({
       login: "",
       password: "",

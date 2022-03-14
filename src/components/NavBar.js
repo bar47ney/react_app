@@ -39,6 +39,7 @@ const NavBar = () => {
           <Link to="/" className="navbar-brand">
             LOGO
           </Link>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -51,8 +52,9 @@ const NavBar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div
-            className={`collapse navbar-collapse justify-content-end ${
+            className={`collapse navbar-collapse justify-content-start ${
               viewMobileMenu ? "show" : ""
             }`}
             id="navbarNav"
@@ -66,17 +68,29 @@ const NavBar = () => {
                 </li>
               ))}
             </ul>
+            {auth.session ? (
+              <div
+                className={`collapse navbar-collapse justify-content-end ${
+                  viewMobileMenu ? "show" : ""
+                }`}
+              >
+                <div className="btn">
+                  <span className="badge rounded-pill bg-light text-dark">
+                    {auth.user}
+                  </span>
+                </div>
+
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => setAuth({ session: false, user: "" })}
+                >
+                  LogOut
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-          {auth ? (
-            <button
-              className="btn btn-outline-secondary"
-              onClick={() => setAuth(false)}
-            >
-              LogOut
-            </button>
-          ) : (
-            ""
-          )}
         </div>
       </nav>
     </div>

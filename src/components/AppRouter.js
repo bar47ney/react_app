@@ -13,7 +13,7 @@ const AppRouter = () => {
   const [toggle, setToggle] = useState(false);
   const { auth } = useContext(AuthContext);
 
-  return auth ? (
+  return auth.session ? (
     <Routes>
       <Route
         path="/"
