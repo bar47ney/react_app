@@ -11,6 +11,14 @@ const UserEdit = (props) => {
   const usersCrud = new Crud("users");
   const [user, setUser] = useState({});
   const [viewSpinner, setViewSpinner] = useState(false);
+  const [viewEditForm, setViewEditForm] = useState(false);
+
+  const onChange = (e) => {
+    const field = e.target.id;
+    field === "userId" || field === "id"
+      ? setUser({ ...user, [field]: +e.target.value })
+      : setUser({ ...user, [field]: e.target.value });
+  };
 
   useEffect(() => {
     getUser();
@@ -30,6 +38,23 @@ const UserEdit = (props) => {
       });
   };
 
+  const saveUser = (e) => {
+    e.preventDefault();
+    setViewSpinner(true);
+    usersCrud
+      .update(user.id, user)
+      .then((res) => {
+        setViewSpinner(false)
+        setUser(res.data);
+        setViewEditForm(false);
+        console.log(user);
+      })
+      .catch((err) => {
+        setError(err);
+        setViewSpinner(false)
+      });
+  };
+
   //   console.log(id);
   console.log(user);
   //   console.log(error);
@@ -40,6 +65,32 @@ const UserEdit = (props) => {
         <Spinner />
       ) : error ? (
         <NotFound title={error.message} />
+      ) : viewEditForm ? (
+        <form className="container m-5 col-6" onSubmit={saveUser}>
+          {user &&
+            Object.keys(user).map((field, index) => {
+              if (field === "id" || field === "address" || field === "company")
+                return;
+              return (
+                <div className="mb-3" key={index}>
+                  <label htmlFor={field} className="form-label">
+                    {field}
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    required
+                    value={user[field]}
+                    id={field}
+                    onChange={onChange}
+                  />
+                </div>
+              );
+            })}
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        </form>
       ) : (
         <div
           className="card position-absolute top-50 start-50 translate-middle"
@@ -55,6 +106,13 @@ const UserEdit = (props) => {
             <NavLink to="/users" className="btn btn-primary">
               Back to Users
             </NavLink>
+            <button
+              type="submit"
+              className="btn btn-primary m-1"
+              onClick={() => setViewEditForm(true)}
+            >
+              Edit
+            </button>
           </div>
         </div>
       )}

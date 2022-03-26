@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyModal from "../../components/MyModal/MyModal";
+import Spinner from "../../components/Spinner";
+import { useSortedAndSearchedPosts } from "../../hooks/usePosts";
 import Crud from "../../service/crud.service";
 import PostAdd from "./PostAdd";
 import PostEdit from "./PostEdit";
-import Spinner from "../../components/Spinner";
-import {
-  useSortedPosts,
-  useSortedAndSearchedPosts,
-} from "../../hooks/usePosts";
 
 const Posts = () => {
   const postsCrud = new Crud("posts");

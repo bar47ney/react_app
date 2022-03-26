@@ -1,55 +1,71 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../context/context";
+import http from "../http";
+import Spinner from "./Spinner";
+import { LOGIN } from "./reducer/reducer";
 
 const Login = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
+  const [viewSpinner, setViewSpinner] = useState(false);
 
   const onChange = (e) => {
     const field = e.target.id;
     setValues({ ...values, [field]: e.target.value });
   };
 
-  const signIn = () => {
-    const userTest = {
-      login: "test",
-      password: "test",
-    };
-    userTest.login === values.login && userTest.password === values.password
-      ? setAuth({session: true, user: userTest.login})
-      : setAuth({session: false, user: ""});
-    setValues({
-      login: "",
-      password: "",
-    });
+  const signIn = (e) => {
+    setViewSpinner(true);
+    e.preventDefault();
+    http
+      .post("https://fakestoreapi.com/auth/login", values)
+      .then((res) => {
+        dispatch({type: LOGIN, data: { session: res.data.token, user: values.username }})
+        window.localStorage.setItem("token", res.data.token);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+        setViewSpinner(false);
+      });
+
+    // const userTest = {
+    //   login: "test",
+    //   password: "test",
+    // };
+    // userTest.login === values.login && userTest.password === values.password
+    //   ? setAuth({session: true, user: userTest.login})
+    //   : setAuth({session: false, user: ""});
+    // setValues({
+    //   login: "",
+    //   password: "",
+    // });
     // return
   };
 
   const [values, setValues] = useState({
-    login: "",
+    username: "",
     password: "",
   });
 
   console.log(values);
 
-  return (
+  return viewSpinner ? (
+    <Spinner />
+  ) : (
     <form className="container mt-5 col-6">
       <div className="mb-3">
-        <label htmlFor="exampleInputEmail1" className="form-label">
-          Login
+        <label htmlFor="username" className="form-label">
+          Username
         </label>
         <input
           type="text"
           className="form-control"
-          id="login"
-          aria-describedby="emailHelp"
+          id="username"
           onChange={onChange}
         />
-        <div id="emailHelp" className="form-text">
-          We'll never share your email with anyone else.
-        </div>
       </div>
       <div className="mb-3">
-        <label htmlFor="exampleInputPassword1" className="form-label">
+        <label htmlFor="password" className="form-label">
           Password
         </label>
         <input
@@ -69,7 +85,7 @@ const Login = () => {
           Check me out
         </label>
       </div>
-      <button type="submit" className="btn btn-primary" onClick={signIn}>
+      <button className="btn btn-primary" onClick={signIn}>
         Submit
       </button>
     </form>

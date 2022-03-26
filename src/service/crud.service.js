@@ -8,6 +8,8 @@ export default class Crud {
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+    this.getOneBy = this.getOneBy.bind(this)
+    this.getOneById = this.getOneById.bind(this)
   }
   getOneBy(field, value) {
     return http.get(`/${this.models}?${field}=${value}`);

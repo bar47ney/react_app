@@ -1,15 +1,33 @@
-import React, { useState } from "react";
-import UserList from "./UserList";
-import UserAdd from "./UserAdd";
-import { usersDb } from "../../components/users";
+import React, { useEffect, useState } from "react";
 import MyModal from "../../components/MyModal/MyModal";
+import Crud from "../../service/crud.service";
+import UserAdd from "./UserAdd";
+import UserList from "./UserList";
 
 const Users = () => {
-  const [users, setUsers] = useState(usersDb);
+  const usersCrud = new Crud("users");
+  const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const show = () => {
     setShowModal(true);
   };
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  const fetchAllUsers = () => {
+    usersCrud
+      .getAll()
+      .then((res) => {
+        console.log(res.data);
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="container mb-5">
       <UserList users={users} setUsers={setUsers} />

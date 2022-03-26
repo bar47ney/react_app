@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useContext } from "react";
-import MyModal from "../../components/MyModal/MyModal";
+import React, { useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import MyModal from "../../components/MyModal/MyModal";
 import AuthContext from "../../context/context";
 
 const UserList = ({ users, setUsers }) => {

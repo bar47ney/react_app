@@ -35,19 +35,21 @@
 // export default App;
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useReducer } from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBar";
+import { reducer } from "./components/reducer/reducer";
 import AuthContext from "./context/context";
-import { useState } from "react";
 
 const App = () => {
-  const [auth, setAuth] = useState({ session: false, user: "" });
+  const auth = window.localStorage.getItem("token");
+  const [state, dispatch] = useReducer(reducer, { session: auth, user: "" });
   return (
     <AuthContext.Provider
       value={{
-        auth,
-        setAuth,
+        state,
+        dispatch,
       }}
     >
       <div className="App">

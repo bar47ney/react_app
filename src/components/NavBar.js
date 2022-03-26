@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/context";
+import { LOGOUT } from "./reducer/reducer";
 
 const NavBar = () => {
   const [viewMobileMenu, setViewMobileMenu] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
   const links = [
     {
       name: "Home",
@@ -31,6 +32,13 @@ const NavBar = () => {
   const viewMenu = () => {
     setViewMobileMenu(!viewMobileMenu);
   };
+
+  const logout = () => {
+    dispatch({ type: LOGOUT, data: { session: null, user: "" } });
+    window.localStorage.clear();
+  };
+
+  console.log(state)
 
   return (
     <div>
@@ -68,7 +76,7 @@ const NavBar = () => {
                 </li>
               ))}
             </ul>
-            {auth.session ? (
+            {state.session ? (
               <div
                 className={`collapse navbar-collapse justify-content-end ${
                   viewMobileMenu ? "show" : ""
@@ -76,14 +84,11 @@ const NavBar = () => {
               >
                 <div className="btn">
                   <span className="badge rounded-pill bg-light text-dark">
-                    {auth.user}
+                    {state.user}
                   </span>
                 </div>
 
-                <button
-                  className="btn btn-outline-secondary"
-                  onClick={() => setAuth({ session: false, user: "" })}
-                >
+                <button className="btn btn-outline-secondary" onClick={logout}>
                   LogOut
                 </button>
               </div>

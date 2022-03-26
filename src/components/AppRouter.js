@@ -11,9 +11,9 @@ import Login from "./Login";
 
 const AppRouter = () => {
   const [toggle, setToggle] = useState(false);
-  const { auth } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
 
-  return auth.session ? (
+  return state.session ? (
     <Routes>
       <Route
         path="/"
