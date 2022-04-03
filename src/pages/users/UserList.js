@@ -1,23 +1,35 @@
 import React, { useContext, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import MyModal from "../../components/MyModal/MyModal";
-import AuthContext from "../../context/context";
+import { deleteUser } from "../../components/reducer/reducer";
+import Context from "../../context/context";
+import Crud from "../../service/crud.service";
 
-const UserList = ({ users, setUsers }) => {
+const UserList = () => {
   const [sorter, setSorter] = useState(0);
   const [searchQuery, setSearcQuery] = useState("");
 
   const [showModal, setShowModal] = useState(false);
-  const [deleteUserName, setdeleteUserName] = useState(null);
+  const [deleteUserId, setdeleteUserId] = useState(null);
+
+  const { state, dispatch } = useContext(Context);
+  const usersCrud = new Crud("users");
 
   const deleteUserReal = () => {
-    setUsers(users.filter((user) => user.name !== deleteUserName));
-    setShowModal(false);
+    usersCrud
+      .delete(deleteUserId)
+      .then((res) => {
+        dispatch(deleteUser(deleteUserId));
+        setShowModal(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-  const deleteUser = (user) => {
+  const deleteThisUser = (user) => {
     setShowModal(true);
-    setdeleteUserName(user.name);
+    setdeleteUserId(user.id);
   };
 
   const onSearch = (e) => {
@@ -30,12 +42,12 @@ const UserList = ({ users, setUsers }) => {
 
   const sortedUsers = useMemo(() => {
     if (sorter) {
-      return [...users].sort((a, b) => b.age - a.age);
+      return [...state.users].sort((a, b) => b.id - a.id);
     }
     if (!sorter) {
-      return [...users].sort((a, b) => a.age - b.age);
+      return [...state.users].sort((a, b) => a.id - b.id);
     }
-  }, [sorter, users]);
+  }, [sorter, state.users]);
 
   const sortedAndSearchedUsers = useMemo(() => {
     return sortedUsers.filter((user) =>
@@ -43,8 +55,8 @@ const UserList = ({ users, setUsers }) => {
     );
   }, [searchQuery, sortedUsers]);
 
-  const { auth, setAuth } = useContext(AuthContext);
-  console.log(auth);
+  // const { auth, setAuth } = useContext(Context);
+  // console.log(auth);
 
   return (
     <>
@@ -85,8 +97,8 @@ const UserList = ({ users, setUsers }) => {
           <tr>
             <th>id</th>
             <th>Name</th>
-            <th>Age</th>
-            <th>Country</th>
+            <th>Email</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
@@ -97,11 +109,11 @@ const UserList = ({ users, setUsers }) => {
                   <Link to={`/users/${user.id}`}>{user.id}</Link>
                 </td>
                 <td>{user.name}</td>
-                <td>{user.age}</td>
-                <td>{user.country}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
                 <td>
                   <button
-                    onClick={() => deleteUser(user)}
+                    onClick={() => deleteThisUser(user)}
                     className="btn btn-primary btn-sm"
                   >
                     Delete

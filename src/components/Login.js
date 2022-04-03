@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import AuthContext from "../context/context";
+import Context from "../context/context";
 import http from "../http";
 import Spinner from "./Spinner";
 import { LOGIN } from "./reducer/reducer";
 
 const Login = () => {
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(Context);
   const [viewSpinner, setViewSpinner] = useState(false);
 
   const onChange = (e) => {
@@ -19,8 +19,9 @@ const Login = () => {
     http
       .post("https://fakestoreapi.com/auth/login", values)
       .then((res) => {
-        dispatch({type: LOGIN, data: { session: res.data.token, user: values.username }})
+        dispatch({type: LOGIN, data: { session: res.data.token, user: values.username, users: [] }})
         window.localStorage.setItem("token", res.data.token);
+        window.localStorage.setItem("user", values.username);
         console.log(res);
       })
       .catch((e) => {

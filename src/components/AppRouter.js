@@ -6,12 +6,12 @@ import MyToggleButton from "../components/MyToggleButton/ToggleButton";
 import Posts from "../pages/posts/Posts";
 import UserEdit from "../pages/users/UserEdit";
 import NotFound from "../pages/NotFound";
-import AuthContext from "../context/context";
+import Context from "../context/context";
 import Login from "./Login";
 
 const AppRouter = () => {
   const [toggle, setToggle] = useState(false);
-  const { state } = useContext(AuthContext);
+  const { state } = useContext(Context);
 
   return state.session ? (
     <Routes>

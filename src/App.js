@@ -40,13 +40,19 @@ import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBar";
 import { reducer } from "./components/reducer/reducer";
-import AuthContext from "./context/context";
+import Context from "./context/context";
 
 const App = () => {
   const auth = window.localStorage.getItem("token");
-  const [state, dispatch] = useReducer(reducer, { session: auth, user: "" });
+  const user = window.localStorage.getItem("user");
+
+  const [state, dispatch] = useReducer(reducer, {
+    session: auth,
+    user: user,
+    users: [],
+  });
   return (
-    <AuthContext.Provider
+    <Context.Provider
       value={{
         state,
         dispatch,
@@ -58,7 +64,7 @@ const App = () => {
           <AppRouter />
         </BrowserRouter>
       </div>
-    </AuthContext.Provider>
+    </Context.Provider>
   );
 };
 

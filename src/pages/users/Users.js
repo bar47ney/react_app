@@ -1,36 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MyModal from "../../components/MyModal/MyModal";
+import { setUsers } from "../../components/reducer/reducer";
+import Context from "../../context/context";
 import Crud from "../../service/crud.service";
 import UserAdd from "./UserAdd";
 import UserList from "./UserList";
 
 const Users = () => {
   const usersCrud = new Crud("users");
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const { state, dispatch } = useContext(Context);
+
   const show = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
-
-  const fetchAllUsers = () => {
-    usersCrud
-      .getAll()
-      .then((res) => {
-        console.log(res.data);
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getUsers = () => {
+    usersCrud.getAll().then((res) => {
+      // dispatch({ type: SET_USERS, data: res.data });
+      if (state.users.length === 0) dispatch(setUsers(res.data));
+    });
   };
+
+  useEffect(() => {
+    // fetchAllUsers();
+    getUsers();
+  }, [state.users.length]);
+
+  // const fetchAllUsers = () => {
+  //   usersCrud
+  //     .getAll()
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setUsers(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   return (
     <div className="container mb-5">
-      <UserList users={users} setUsers={setUsers} />
+      {state.users.length && <UserList />}
       <button className="btn btn-secondary" onClick={show}>
         Add user
       </button>
@@ -39,11 +51,7 @@ const Users = () => {
         onCancel={() => setShowModal(false)}
         closeButtonShow
       >
-        <UserAdd
-          users={users}
-          setUsers={setUsers}
-          closeModal={() => setShowModal(false)}
-        />
+        <UserAdd closeModal={() => setShowModal(false)} />
       </MyModal>
     </div>
   );

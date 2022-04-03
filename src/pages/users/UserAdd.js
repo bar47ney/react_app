@@ -1,30 +1,43 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { addUser } from "../../components/reducer/reducer";
+import Context from "../../context/context";
+import Crud from "../../service/crud.service";
 
-const UserAdd = ({ users, setUsers, closeModal }) => {
+const UserAdd = ({ closeModal }) => {
+  const { state, dispatch } = useContext(Context);
+  const usersCrud = new Crud("users");
+
   const onChange = (e) => {
     const field = e.target.id;
     setValues({ ...values, [field]: e.target.value });
-
-    
   };
-  const addUser = () => {
-    setUsers([...users, values]);
-    setValues({
-      name: "",
-      age: "",
-      country: "",
-    });
-    closeModal();
+  const addNewUser = () => {
+    usersCrud
+      .create(values)
+      .then((res) => {
+        dispatch(addUser(res.data));
+        setValues({
+          name: "",
+          age: "",
+          country: "",
+          id: "",
+        });
+        closeModal();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
   const [values, setValues] = useState({
     name: "",
     age: "",
     country: "",
+    id: Date.now(),
   });
   return (
     <>
       {Object.keys(values).map((value, index) => {
-        if (value === "age") {
+        if (value === "age" || value === "id") {
           return (
             <div className="" key={index}>
               <input
@@ -51,7 +64,7 @@ const UserAdd = ({ users, setUsers, closeModal }) => {
         );
       })}
       <div className="">
-        <button className="btn btn-primary mt-2 btn-sm" onClick={addUser}>
+        <button className="btn btn-primary mt-2 btn-sm" onClick={addNewUser}>
           Add new User
         </button>
       </div>

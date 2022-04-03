@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Crud from "../../service/crud.service";
 import Spinner from "../../components/Spinner";
 import { NavLink } from "react-router-dom";
 import NotFound from "../NotFound";
+import { editUser } from "../../components/reducer/reducer";
+import Context from "../../context/context";
 
 const UserEdit = (props) => {
   const [error, setError] = useState();
@@ -12,6 +14,8 @@ const UserEdit = (props) => {
   const [user, setUser] = useState({});
   const [viewSpinner, setViewSpinner] = useState(false);
   const [viewEditForm, setViewEditForm] = useState(false);
+
+  const { state, dispatch } = useContext(Context);
 
   const onChange = (e) => {
     const field = e.target.id;
@@ -44,14 +48,15 @@ const UserEdit = (props) => {
     usersCrud
       .update(user.id, user)
       .then((res) => {
-        setViewSpinner(false)
+        setViewSpinner(false);
         setUser(res.data);
+        dispatch(editUser(res.data, user.id));
         setViewEditForm(false);
         console.log(user);
       })
       .catch((err) => {
         setError(err);
-        setViewSpinner(false)
+        setViewSpinner(false);
       });
   };
 
