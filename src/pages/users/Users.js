@@ -19,7 +19,9 @@ const Users = () => {
   const getUsers = () => {
     usersCrud.getAll().then((res) => {
       // dispatch({ type: SET_USERS, data: res.data });
-      if (state.users.length === 0) dispatch(setUsers(res.data));
+      res.data === state.users || state.users.length === 0
+        ? dispatch(setUsers(res.data))
+        : dispatch(setUsers(state.users));
     });
   };
 

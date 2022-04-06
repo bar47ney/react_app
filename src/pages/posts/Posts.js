@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MyModal from "../../components/MyModal/MyModal";
 import Spinner from "../../components/Spinner";
 import { useSortedAndSearchedPosts } from "../../hooks/usePosts";
@@ -20,12 +20,38 @@ const Posts = () => {
   const [editPost, setEditPost] = useState({});
 
   const [viewSpinner, setViewSpinner] = useState(false);
+  const observer = useRef(null);
+  const trigger = useRef(null);
+
+  const [newPostLength, setNewPostLength] = useState(12)
+
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+    const callback = function (entries) {
+      if (entries[0].isIntersecting) {
+        console.log(entries);
+        fetchNewAllPosts()
+      }
+    };
+    observer.current = new IntersectionObserver(callback);
+    observer.current.observe(trigger.current);
+  }, [usersPosts]);
 
   useEffect(() => {
     fetchAllPosts();
   }, []);
 
   console.log(usersPosts);
+
+  const fetchNewAllPosts = () => {
+    setViewSpinner(true);
+    postsCrud.get(1, newPostLength).then((res) => {
+      console.log(res.data);
+      setNewPostLength(newPostLength + 12)
+      setUsersPosts(res.data);
+      setViewSpinner(false);
+    });
+  };
 
   const fetchAllPosts = () => {
     setViewSpinner(true);
@@ -136,6 +162,7 @@ const Posts = () => {
           </option>
           <option value="1">from Max to Min</option>
         </select>
+
         {viewSpinner ? (
           <Spinner />
         ) : (
@@ -178,6 +205,15 @@ const Posts = () => {
             </div>
           </>
         )}
+
+        <div ref={trigger}>Hello Man</div>
+        <button
+          onClick={() => {
+            console.log((observer.current.innerText = "Chao"));
+          }}
+        >
+          Click
+        </button>
       </div>
     </>
   );
